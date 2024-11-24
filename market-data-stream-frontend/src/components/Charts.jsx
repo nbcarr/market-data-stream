@@ -94,7 +94,7 @@ function Charts({ priceHistory }) {
               type="monotone"
               dataKey="vwap"
               yAxisId="price"
-              stroke="#82ca9d"
+              stroke="#ff80df"
               isAnimationActive={false}
               strokeWidth={2}
               dot={false}

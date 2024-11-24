@@ -47,7 +47,7 @@ class MarketDataServer:
         if not self.message_queue.empty():
             return self.message_queue.get()
 
-        assert False, "MarketDataServer.get_market_data(): Should be unreachable"
+        return None
 
     def start(self):
         """Start the server"""
