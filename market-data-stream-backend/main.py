@@ -1,14 +1,14 @@
-from fastapi import FastAPI, WebSocket
-from fastapi.middleware.cors import CORSMiddleware
-from server.market_data_server import MarketDataServer
 import asyncio
 import json
 import logging
-from config import USE_FAKE_DATA, HOST, PORT
+
+from config import HOST, PORT, USE_FAKE_DATA
+from fastapi import FastAPI, WebSocket
+from fastapi.middleware.cors import CORSMiddleware
+from server.market_data_server import MarketDataServer
 
 logging.basicConfig(
-    level=logging.INFO,
-    format="%(asctime)s - %(levelname)s - %(message)s"
+    level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s"
 )
 logger = logging.getLogger(__name__)
 
@@ -23,6 +23,7 @@ app.add_middleware(
 )
 
 server = MarketDataServer(use_fake_data=USE_FAKE_DATA)
+
 
 @app.websocket("/ws")
 async def websocket_endpoint(websocket: WebSocket):
@@ -40,17 +41,16 @@ async def websocket_endpoint(websocket: WebSocket):
         while True:
             try:
                 # Check for client messages and handle new symbol updates
-                data = await asyncio.wait_for(
-                    websocket.receive_json(),
-                    timeout=0.1
-                )
-                
+                data = await asyncio.wait_for(websocket.receive_json(), timeout=0.1)
+
                 if data.get("action") == "update_symbol":
-                    financials, news = await server.handle_symbol_update(data.get("symbol"))
+                    financials, news = await server.handle_symbol_update(
+                        data.get("symbol")
+                    )
                     await websocket.send_json(financials)
                     await websocket.send_json(news)
 
-            except asyncio.TimeoutError: # nothing received
+            except asyncio.TimeoutError:  # nothing received
                 pass
 
             market_data = server.get_market_data()
@@ -67,6 +67,8 @@ async def websocket_endpoint(websocket: WebSocket):
     finally:
         logger.info("Client disconnected")
 
+
 if __name__ == "__main__":
     import uvicorn
+
     uvicorn.run(app, host=HOST, port=PORT)
