@@ -4,6 +4,12 @@ A full-stack application that provides real-time market data visualization, fina
 
 Built with FastAPI/Python and JavaScript/React, it features WebSocket streaming for live market data and a responsive, interactive UI.
 
+
+
+https://github.com/user-attachments/assets/c1e8c952-c6f5-4070-ae09-678295d01934
+
+
+
 ## Features
 
 - Real-time market data streaming
