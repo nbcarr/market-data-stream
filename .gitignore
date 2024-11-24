@@ -1,0 +1,5 @@
+node_modules
+dist
+dist-ssr
+config.py
+__pycache__
